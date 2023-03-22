@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TestDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Price" Type="decimal" Precision="12" Scale="2" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Scheme">
+          <Key>
+            <PropertyRef Name="SchemeId" />
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="SchemeId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ProductId" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SchemeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SchemeTypeId" Type="int" />
+        </EntityType>
+        <EntityType Name="SchemeType">
+          <Key>
+            <PropertyRef Name="SchemeTypeId" />
+          </Key>
+          <Property Name="SchemeTypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_Scheme_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="Scheme" Type="Self.Scheme" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="Scheme">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Scheme_SchemeType">
+          <End Role="SchemeType" Type="Self.SchemeType" Multiplicity="0..1" />
+          <End Role="Scheme" Type="Self.Scheme" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SchemeType">
+              <PropertyRef Name="SchemeTypeId" />
+            </Principal>
+            <Dependent Role="Scheme">
+              <PropertyRef Name="SchemeTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TestDBModelStoreContainer">
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Scheme" EntityType="Self.Scheme" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SchemeType" EntityType="Self.SchemeType" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Scheme_Product" Association="Self.FK_Scheme_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Scheme" EntitySet="Scheme" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Scheme_SchemeType" Association="Self.FK_Scheme_SchemeType">
+            <End Role="SchemeType" EntitySet="SchemeType" />
+            <End Role="Scheme" EntitySet="Scheme" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TestDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="TestDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Product" EntityType="TestDBModel.Product" />
+          <EntitySet Name="Scheme" EntityType="TestDBModel.Scheme" />
+          <EntitySet Name="SchemeType" EntityType="TestDBModel.SchemeType" />
+          <AssociationSet Name="FK_Scheme_Product" Association="TestDBModel.FK_Scheme_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="Scheme" EntitySet="Scheme" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Scheme_SchemeType" Association="TestDBModel.FK_Scheme_SchemeType">
+            <End Role="SchemeType" EntitySet="SchemeType" />
+            <End Role="Scheme" EntitySet="Scheme" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="ProductId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Decimal" Precision="12" Scale="2" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Scheme" Relationship="TestDBModel.FK_Scheme_Product" FromRole="Product" ToRole="Scheme" />
+        </EntityType>
+        <EntityType Name="Scheme">
+          <Key>
+            <PropertyRef Name="SchemeId" />
+            <PropertyRef Name="ProductId" />
+          </Key>
+          <Property Name="SchemeId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductId" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SchemeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SchemeTypeId" Type="Int32" />
+          <NavigationProperty Name="Product" Relationship="TestDBModel.FK_Scheme_Product" FromRole="Scheme" ToRole="Product" />
+          <NavigationProperty Name="SchemeType" Relationship="TestDBModel.FK_Scheme_SchemeType" FromRole="Scheme" ToRole="SchemeType" />
+        </EntityType>
+        <EntityType Name="SchemeType">
+          <Key>
+            <PropertyRef Name="SchemeTypeId" />
+          </Key>
+          <Property Name="SchemeTypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Scheme" Relationship="TestDBModel.FK_Scheme_SchemeType" FromRole="SchemeType" ToRole="Scheme" />
+        </EntityType>
+        <Association Name="FK_Scheme_Product">
+          <End Type="TestDBModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="TestDBModel.Scheme" Role="Scheme" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="ProductId" />
+            </Principal>
+            <Dependent Role="Scheme">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Scheme_SchemeType">
+          <End Type="TestDBModel.SchemeType" Role="SchemeType" Multiplicity="0..1" />
+          <End Type="TestDBModel.Scheme" Role="Scheme" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SchemeType">
+              <PropertyRef Name="SchemeTypeId" />
+            </Principal>
+            <Dependent Role="Scheme">
+              <PropertyRef Name="SchemeTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TestDBModelStoreContainer" CdmEntityContainer="TestDBEntities">
+          <EntitySetMapping Name="Product">
+            <EntityTypeMapping TypeName="TestDBModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Scheme">
+            <EntityTypeMapping TypeName="TestDBModel.Scheme">
+              <MappingFragment StoreEntitySet="Scheme">
+                <ScalarProperty Name="SchemeTypeId" ColumnName="SchemeTypeId" />
+                <ScalarProperty Name="SchemeName" ColumnName="SchemeName" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="SchemeId" ColumnName="SchemeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SchemeType">
+            <EntityTypeMapping TypeName="TestDBModel.SchemeType">
+              <MappingFragment StoreEntitySet="SchemeType">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="SchemeTypeId" ColumnName="SchemeTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
